@@ -13,10 +13,12 @@ export class Main {
 
   private static RAD:number = Math.PI / 180;
 
-  private static CANVAS_WIDTH:number = 960;
-  private static CANVAS_HEIGHT:number = 540;
+  private static CANVAS_WIDTH:number = innerWidth * devicePixelRatio;
+  private static CANVAS_HEIGHT:number = innerHeight * devicePixelRatio;
 
   private stats:Stats;
+
+  private numElementsDiv:HTMLDivElement;
 
   private canvas:HTMLCanvasElement;
   private gpu:WebGPURenderingContext;
@@ -59,6 +61,9 @@ export class Main {
     this.stats = new Stats();
     document.body.appendChild(this.stats.dom);
 
+    // Div setup
+    this.numElementsDiv = <HTMLDivElement> document.getElementById('numElements');
+
     // Canvas setup
     this.canvas = <HTMLCanvasElement> document.getElementById(('myCanvas'));
     this.canvas.width = Main.CANVAS_WIDTH;
@@ -71,7 +76,8 @@ export class Main {
     this.commandQueue = this.gpu.createCommandQueue();
 
     // Choose appropriate thread size for runnning environment
-    this.maxThreadNum = /iP(hone|(o|a)d)/.test(navigator.userAgent) ? Main.MAX_THREAD_NUM_iOS : Main.MAX_THREAD_NUM_macOS;
+    const isIPhone:boolean = /iP(hone|(o|a)d)/.test(navigator.userAgent);
+    this.maxThreadNum = isIPhone ? Main.MAX_THREAD_NUM_iOS : Main.MAX_THREAD_NUM_macOS;
 
     // Load metal shader file and create each WebGPUFunction to use for rendering and computing
     let shader:string = await fetch('shader/defaultShader.metal').then((response:Response) => response.text());
@@ -149,7 +155,7 @@ export class Main {
     this.camera = new Camera(45 * Main.RAD, Main.CANVAS_WIDTH / Main.CANVAS_HEIGHT, 0.1, 1000.0);
     this.cameraController = new RoundCameraController(this.camera, this.canvas);
     this.canvas.style.cursor = 'move';
-    this.cameraController.radius = 250;
+    this.cameraController.radius = isIPhone ? 600 : 250;
     this.cameraController.radiusOffset = 2;
     this.cameraController.rotate(0, 0);
 
@@ -158,6 +164,7 @@ export class Main {
     this.wave = 0;
     this.sortStepCompleted = false;
     this.vertexUniform.sortCompleteTime = Number.MAX_VALUE;
+    this.numElementsDiv.innerText = '要素数：' + this.sortLength;
 
     this.render();
   }
@@ -198,6 +205,7 @@ export class Main {
       }
       this.vertexUniform.numLines = this.sortLength;
       this.vertexUniform.sortCompleteTime = Number.MAX_VALUE;
+      this.numElementsDiv.innerText = '要素数：' + this.sortLength;
       this.resetData(this.sortData, this.sortLength);
       this.time = 0;
       this.sortStepCompleted = false;

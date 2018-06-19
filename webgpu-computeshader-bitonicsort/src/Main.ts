@@ -48,12 +48,12 @@ export class Main {
     this.selectBox.selectedIndex = 7;
     this.selectBox.addEventListener('change', () => {
       this.logElement.innerText = '';
+      this.selectBox.disabled = true;
       requestAnimationFrame(() => this.compute());
     });
 
     // Div setup
-    this.logElement = <HTMLDivElement> document.createElement('div');
-    document.getElementById('contents').appendChild(this.logElement);
+    this.logElement = <HTMLDivElement> document.getElementById('log');
 
     // Canvas setup
     const canvas:HTMLCanvasElement = <HTMLCanvasElement> document.createElement(('canvas'));
@@ -90,7 +90,7 @@ export class Main {
 
     await this.sumCPU(arr.slice(0));
     await this.sumGPU(arr.slice(0));
-    this.log('compute completed');
+    this.selectBox.disabled = false;
   }
 
   private async sumCPU(arr:Float32Array):Promise<void> {
@@ -100,7 +100,7 @@ export class Main {
         return a - b;
       }
     );
-    this.log(`CPU time: ${performance.now() - now} ms`);
+    this.log(`CPUでの実行時間: ${Math.round(performance.now() - now)} ms`);
     console.log(`sort result validation: ${this.validateSorted(arr) ? 'success' : 'failure'}`);
 
     // console.log(arr);
@@ -161,7 +161,7 @@ export class Main {
     await completed;
 
     const result:Float32Array = new Float32Array(inoutBuffer.contents);
-    this.log(`GPU time: ${performance.now() - now} ms`);
+    this.log(`GPUでの実行時間: ${Math.round(performance.now() - now)} ms`);
     console.log(`sort result validation: ${this.validateSorted(result) ? 'success' : 'failure'}`);
     // this.log(`threadgroup: ${threadgroupsPerGrid.width}, thread: ${threadsPerThreadgroup.width}`);
 

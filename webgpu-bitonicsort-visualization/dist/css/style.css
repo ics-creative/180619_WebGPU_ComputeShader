@@ -1,10 +1,27 @@
-html, body {
+body {
   margin: 0;
   padding: 0;
+  background-color: black;
+  overflow: hidden;
+  font-family: sans-serif;
 }
 
-#container {
-  position: relative;
+#myCanvas {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+#numElements {
+  position: absolute;
+  text-align: right;
+  font-size: 4vw;
+  top: 0px;
+  right: 0px;
+  padding: 20px;
+  color: white;
 }
 
 body.error {

@@ -1,10 +1,23 @@
-html, body {
-  margin: 0;
-  padding: 0;
+body {
+  font-family: sans-serif;
+  font-size: 1.25rem;
+}
+
+h1 {
+  font-size: 1.5rem;
 }
 
 #container {
   position: relative;
+}
+
+select {
+  zoom: 2;
+}
+
+div#log {
+  background-color: rgb(231, 231, 231);
+  padding: 20px;
 }
 
 body.error {

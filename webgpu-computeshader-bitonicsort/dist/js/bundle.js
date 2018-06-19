@@ -1,1 +1,247 @@
-!function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)n.d(r,o,function(t){return e[t]}.bind(null,o));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="js/",n(n.s=0)}([function(e,t,n){"use strict";n.r(t),n.d(t,"Main",function(){return i});var r=function(e,t,n,r){return new(n||(n=Promise))(function(o,i){function u(e){try{c(r.next(e))}catch(e){i(e)}}function a(e){try{c(r.throw(e))}catch(e){i(e)}}function c(e){e.done?o(e.value):new n(function(t){t(e.value)}).then(u,a)}c((r=r.apply(e,t||[])).next())})},o=function(e,t){var n,r,o,i,u={label:0,sent:function(){if(1&o[0])throw o[1];return o[1]},trys:[],ops:[]};return i={next:a(0),throw:a(1),return:a(2)},"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function a(i){return function(a){return function(i){if(n)throw new TypeError("Generator is already executing.");for(;u;)try{if(n=1,r&&(o=2&i[0]?r.return:i[0]?r.throw||((o=r.return)&&o.call(r),0):r.next)&&!(o=o.call(r,i[1])).done)return o;switch(r=0,o&&(i=[2&i[0],o.value]),i[0]){case 0:case 1:o=i;break;case 4:return u.label++,{value:i[1],done:!1};case 5:u.label++,r=i[1],i=[0];continue;case 7:i=u.ops.pop(),u.trys.pop();continue;default:if(!(o=(o=u.trys).length>0&&o[o.length-1])&&(6===i[0]||2===i[0])){u=0;continue}if(3===i[0]&&(!o||i[1]>o[0]&&i[1]<o[3])){u.label=i[1];break}if(6===i[0]&&u.label<o[1]){u.label=o[1],o=i;break}if(o&&u.label<o[2]){u.label=o[2],u.ops.push(i);break}o[2]&&u.ops.pop(),u.trys.pop();continue}i=t.call(e,u)}catch(e){i=[6,e],r=0}finally{n=o=0}if(5&i[0])throw i[1];return{value:i[0]?i[1]:void 0,done:!0}}([i,a])}}},i=function(){function e(){console.log(new Date),this.init()}return e.prototype.init=function(){return r(this,void 0,void 0,function(){var t,n,r,i,u,a,c,s,l,f=this;return o(this,function(o){switch(o.label){case 0:if(!("WebGPURenderingContext"in window))return document.body.className="error",[2];for(/iP(hone|(o|a)d)/.test(navigator.userAgent)?(this.maxThreadNum=e.MAX_THREAD_NUM_iOS,t=e.MAX_THREADGROUP_NUM_iOS):(this.maxThreadNum=e.MAX_THREAD_NUM_macOS,t=e.MAX_THREADGROUP_NUM_macOS),this.selectBox=document.getElementById("selectBox"),n=Math.log2(this.maxThreadNum*t)-9,r=0;r<n;r++)(i=document.createElement("option")).text=""+this.getLength(r),this.selectBox.add(i);return this.selectBox.selectedIndex=7,this.selectBox.addEventListener("change",function(){f.logElement.innerText="",requestAnimationFrame(function(){return f.compute()})}),this.logElement=document.createElement("div"),document.getElementById("contents").appendChild(this.logElement),u=document.createElement("canvas"),this.gpu=u.getContext("webgpu"),this.commandQueue=this.gpu.createCommandQueue(),[4,fetch("shader/defaultShader.metal").then(function(e){return e.text()})];case 1:return a=(a=o.sent()).replace("#define MAX_THREAD_NUM 512","#define MAX_THREAD_NUM "+this.maxThreadNum),c=this.gpu.createLibrary(a),s=c.functionWithName("bitonicSort_phase1"),l=c.functionWithName("bitonicSort_phase2"),c&&s&&l?(this.computePipelineState=this.gpu.createComputePipelineState(s),this.computePipelineState2=this.gpu.createComputePipelineState(l),this.compute(),[2]):[2]}})})},e.prototype.compute=function(){return r(this,void 0,void 0,function(){var e,t;return o(this,function(n){switch(n.label){case 0:return e=this.getLength(this.selectBox.selectedIndex),t=new Float32Array(e),this.resetData(t,e),[4,this.sumCPU(t.slice(0))];case 1:return n.sent(),[4,this.sumGPU(t.slice(0))];case 2:return n.sent(),this.log("compute completed"),[2]}})})},e.prototype.sumCPU=function(e){return r(this,void 0,void 0,function(){var t;return o(this,function(n){return t=performance.now(),e.sort(function(e,t){return e-t}),this.log("CPU time: "+(performance.now()-t)+" ms"),console.log("sort result validation: "+(this.validateSorted(e)?"success":"failure")),[2]})})},e.prototype.sumGPU=function(e){return r(this,void 0,void 0,function(){var t,n,r,i,u,a,c,s,l,f,h,d,p,m;return o(this,function(o){switch(o.label){case 0:if(t=performance.now(),n=this.commandQueue.createCommandBuffer(),r=e.length,i=this.gpu.createBuffer(e),u=Math.max(1,r/this.maxThreadNum),(a=n.createComputeCommandEncoder()).setComputePipelineState(this.computePipelineState),c={width:u,height:1,depth:1},s={width:Math.min(r,this.maxThreadNum),height:1,depth:1},a.setBuffer(i,0,0),a.dispatch(c,s),a.endEncoding(),u>1)for(l=u;l<=r;l<<=1)for(f=l>>1;f>0;f>>=1)(h=n.createComputeCommandEncoder()).setComputePipelineState(this.computePipelineState2),h.setBuffer(i,0,0),d=this.gpu.createBuffer(new Uint32Array([l,f])),h.setBuffer(d,0,1),h.dispatch(c,s),h.endEncoding();return p=n.completed,n.commit(),[4,p];case 1:return o.sent(),m=new Float32Array(i.contents),this.log("GPU time: "+(performance.now()-t)+" ms"),console.log("sort result validation: "+(this.validateSorted(m)?"success":"failure")),[2]}})})},e.prototype.resetData=function(e,t){for(var n=0;n<t;n++)e[n]=Math.random()},e.prototype.validateSorted=function(e){for(var t=e.length,n=0;n<t;n++)if(n!==t-1&&e[n]>e[n+1])return console.log(n,e[n],e[n+1]),console.log(e),!1;return!0},e.prototype.getLength=function(e){return 1<<e+10},e.prototype.log=function(e){this.logElement.innerText+=e+"\n"},e.MAX_THREAD_NUM_iOS=512,e.MAX_THREAD_NUM_macOS=1024,e.MAX_THREADGROUP_NUM_iOS=1024,e.MAX_THREADGROUP_NUM_macOS=2048,e}();window.addEventListener("DOMContentLoaded",function(){new i})}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "js/";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Main", function() { return Main; });
+class Main {
+    constructor() {
+        console.log(new Date());
+        this.init();
+    }
+    async init() {
+        // Check whether WebGPU is enabled
+        if (!('WebGPURenderingContext' in window)) {
+            document.body.className = 'error';
+            return;
+        }
+        // Choose appropriate thread size for runnning environment
+        let maxThreadgroupNum;
+        if (/iP(hone|(o|a)d)/.test(navigator.userAgent)) {
+            this.maxThreadNum = Main.MAX_THREAD_NUM_iOS;
+            maxThreadgroupNum = Main.MAX_THREADGROUP_NUM_iOS;
+        }
+        else {
+            this.maxThreadNum = Main.MAX_THREAD_NUM_macOS;
+            maxThreadgroupNum = Main.MAX_THREADGROUP_NUM_macOS;
+        }
+        // Selector setup
+        this.selectBox = document.getElementById('selectBox');
+        const maxNumElementsIndex = Math.log2(this.maxThreadNum * maxThreadgroupNum) - 9;
+        for (let i = 0; i < maxNumElementsIndex; i++) {
+            const option = document.createElement('option');
+            option.text = '' + this.getLength(i);
+            this.selectBox.add(option);
+        }
+        this.selectBox.selectedIndex = 7;
+        this.selectBox.addEventListener('change', () => {
+            this.logElement.innerText = '';
+            this.selectBox.disabled = true;
+            requestAnimationFrame(() => this.compute());
+        });
+        // Div setup
+        this.logElement = document.getElementById('log');
+        // Canvas setup
+        const canvas = document.createElement(('canvas'));
+        // Create WebGPURenderingContext
+        this.gpu = canvas.getContext('webgpu');
+        // Create WebGPUCommandQueue
+        this.commandQueue = this.gpu.createCommandQueue();
+        // Load metal shader file and create each WebGPUFunction to use for computing
+        let shader = await fetch('shader/defaultShader.metal').then((response) => response.text());
+        shader = shader.replace('#define MAX_THREAD_NUM 512', `#define MAX_THREAD_NUM ${this.maxThreadNum}`);
+        const library = this.gpu.createLibrary(shader);
+        const kernelFunction1 = library.functionWithName('bitonicSort_phase1');
+        const kernelFunction2 = library.functionWithName('bitonicSort_phase2');
+        if (!library || !kernelFunction1 || !kernelFunction2) {
+            return;
+        }
+        // Create pipelineState for compute
+        this.computePipelineState = this.gpu.createComputePipelineState(kernelFunction1);
+        this.computePipelineState2 = this.gpu.createComputePipelineState(kernelFunction2);
+        this.compute();
+    }
+    async compute() {
+        const length = this.getLength(this.selectBox.selectedIndex);
+        const arr = new Float32Array(length);
+        this.resetData(arr, length);
+        // console.log(arr);
+        await this.sumCPU(arr.slice(0));
+        await this.sumGPU(arr.slice(0));
+        this.selectBox.disabled = false;
+    }
+    async sumCPU(arr) {
+        const now = performance.now();
+        arr.sort((a, b) => {
+            return a - b;
+        });
+        this.log(`CPUでの実行時間: ${Math.round(performance.now() - now)} ms`);
+        console.log(`sort result validation: ${this.validateSorted(arr) ? 'success' : 'failure'}`);
+        // console.log(arr);
+    }
+    async sumGPU(arr) {
+        const now = performance.now();
+        // prepare command
+        const commandBuffer = this.commandQueue.createCommandBuffer();
+        const length = arr.length;
+        let inoutBuffer = this.gpu.createBuffer(arr);
+        const threadgroups = Math.max(1, length / this.maxThreadNum);
+        const computeCommandEncoder = commandBuffer.createComputeCommandEncoder();
+        computeCommandEncoder.setComputePipelineState(this.computePipelineState);
+        const threadgroupsPerGrid = {
+            width: threadgroups,
+            height: 1,
+            depth: 1
+        };
+        const threadsPerThreadgroup = {
+            width: Math.min(length, this.maxThreadNum),
+            height: 1,
+            depth: 1
+        };
+        computeCommandEncoder.setBuffer(inoutBuffer, 0, 0);
+        computeCommandEncoder.dispatch(threadgroupsPerGrid, threadsPerThreadgroup);
+        computeCommandEncoder.endEncoding();
+        if (threadgroups > 1) {
+            for (let k = threadgroups; k <= length; k <<= 1) {
+                for (let j = k >> 1; j > 0; j >>= 1) {
+                    const computeCommandEncoder = commandBuffer.createComputeCommandEncoder();
+                    computeCommandEncoder.setComputePipelineState(this.computePipelineState2);
+                    computeCommandEncoder.setBuffer(inoutBuffer, 0, 0);
+                    const uniformBuffer = this.gpu.createBuffer(new Uint32Array([k, j]));
+                    computeCommandEncoder.setBuffer(uniformBuffer, 0, 1);
+                    computeCommandEncoder.dispatch(threadgroupsPerGrid, threadsPerThreadgroup);
+                    computeCommandEncoder.endEncoding();
+                }
+            }
+        }
+        const completed = commandBuffer.completed;
+        // commit command
+        commandBuffer.commit();
+        await completed;
+        const result = new Float32Array(inoutBuffer.contents);
+        this.log(`GPUでの実行時間: ${Math.round(performance.now() - now)} ms`);
+        console.log(`sort result validation: ${this.validateSorted(result) ? 'success' : 'failure'}`);
+        // this.log(`threadgroup: ${threadgroupsPerGrid.width}, thread: ${threadsPerThreadgroup.width}`);
+        // console.log(result);
+    }
+    resetData(arr, sortLength) {
+        for (let i = 0; i < sortLength; i++) {
+            arr[i] = Math.random();
+        }
+    }
+    validateSorted(arr) {
+        const length = arr.length;
+        for (let i = 0; i < length; i++) {
+            if (i !== length - 1 && arr[i] > arr[i + 1]) {
+                console.log(i, arr[i], arr[i + 1]);
+                console.log(arr);
+                return false;
+            }
+        }
+        return true;
+    }
+    getLength(index) {
+        return 1 << (index + 10);
+    }
+    log(str) {
+        this.logElement.innerText += str + '\n';
+    }
+}
+Main.MAX_THREAD_NUM_iOS = 512;
+Main.MAX_THREAD_NUM_macOS = 1024;
+Main.MAX_THREADGROUP_NUM_iOS = 1024;
+Main.MAX_THREADGROUP_NUM_macOS = 2048;
+window.addEventListener('DOMContentLoaded', () => {
+    new Main();
+});
+
+
+/***/ })
+/******/ ]);

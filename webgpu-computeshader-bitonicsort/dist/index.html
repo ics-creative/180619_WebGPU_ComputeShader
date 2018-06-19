@@ -2,8 +2,7 @@
 <html lang="ja" dir="ltr">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=960, user-scalable=no"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, user-scalable=no"/>
   <meta name="google" content="notranslate"/>
   <title>WebGPU ComputeShader Bitonicsort Demo</title>
   <link rel="stylesheet" href="css/style.css"/>
@@ -19,8 +18,12 @@
   </p>
 </div>
 <div id="contents">
-  <label for="selectBox">要素数</label>
+  <h1>WebGPUを使ったバイトニックソートの実行デモ</h1>
+  <p>選択した要素数の配列をCPUとGPUでそれぞれソートし、実行時間を比較します。</p>
+  <label for="selectBox">要素数：</label>
   <select id="selectBox"></select>
+  <div id="log">
+  </div>
 </div>
 </body>
 </html>
