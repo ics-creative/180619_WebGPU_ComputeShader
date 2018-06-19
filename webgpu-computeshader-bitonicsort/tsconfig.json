@@ -3,10 +3,10 @@
     "module": "es2015",
     "lib": [
       "dom",
-      "es2017"
+      "es2018"
     ],
     "declaration": false,
-    "target": "es5",
+    "target": "es2017",
     "noImplicitAny": false,
     "sourceMap": false
   }

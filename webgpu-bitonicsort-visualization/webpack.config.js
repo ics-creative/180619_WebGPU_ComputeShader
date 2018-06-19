@@ -8,6 +8,9 @@ const webpackConfig = {
   resolve: {
     extensions: ['*', '.js', '.ts']
   },
+  optimization: {
+    minimize: false
+  },
   module: {
     rules: [
       {

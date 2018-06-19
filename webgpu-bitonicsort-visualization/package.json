@@ -2,6 +2,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development --disableHostCheck",
+    "lint": "tslint --project tslint.json",
+    "format": "tslint --project tslint.json --fix",
     "metalErrorCheck": "xcrun -sdk iphoneos metal dist/shader/defaultShader.metal -o dist/shader/defaultShader.air"
   },
   "devDependencies": {
