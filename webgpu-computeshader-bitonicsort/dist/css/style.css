@@ -39,6 +39,12 @@ body.error #contents {
   text-align: center;
 }
 
+@media (max-width: 480px) {
+  #error {
+    width: 100vw;
+  }
+}
+
 body.error #error {
   display: block;
 }
