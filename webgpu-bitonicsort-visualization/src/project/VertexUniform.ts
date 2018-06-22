@@ -41,12 +41,6 @@ export class VertexUniform extends Uniform {
     this._bufferData[18] = value;
   }
 
-  protected _vertexUniformBuffer:WebGPUBuffer;
-
-  public get vertexUniformBuffer():WebGPUBuffer {
-    return this._vertexUniformBuffer;
-  }
-
   constructor() {
     super();
     this._bufferDataLength = VertexUniform.BUFFER_LENGTH;

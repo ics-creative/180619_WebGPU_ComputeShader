@@ -249,9 +249,6 @@ class VertexUniform_VertexUniform extends Uniform {
     set sortCompleteTime(value) {
         this._bufferData[18] = value;
     }
-    get vertexUniformBuffer() {
-        return this._vertexUniformBuffer;
-    }
 }
 VertexUniform_VertexUniform.BUFFER_LENGTH = 19;
 
