@@ -3,6 +3,7 @@ import {VertexUniform} from './project/VertexUniform';
 import {WirePlane} from './project/WirePlane';
 import {Camera} from './webgpu/Camera';
 import {RoundCameraController} from './webgpu/RoundCameraController';
+import {WebMetalTranslator} from './webgpu/WebMetalTranslator';
 
 export class Main {
   private static readonly MAX_THREAD_NUM_iOS:number = 512;
@@ -52,7 +53,13 @@ export class Main {
 
   private async init():Promise<void> {
     // Check whether WebGPU is enabled
-    if (!('WebGPURenderingContext' in window)) {
+    if ('WebMetalRenderingContext' in window) {
+      WebMetalTranslator.useWebMetal = true;
+    }
+    else if ('WebGPURenderingContext' in window && 'WebGPULibrary' in window) {
+      WebMetalTranslator.useWebMetal = false;
+    }
+    else {
       document.body.className = 'error';
       return;
     }
@@ -70,7 +77,7 @@ export class Main {
     this.canvas.height = Main.CANVAS_HEIGHT;
 
     // Create WebGPURenderingContext
-    this.gpu = this.canvas.getContext('webgpu');
+    this.gpu = WebMetalTranslator.createWebGPURenderingContext(this.canvas);
 
     // Create WebGPUCommandQueue
     this.commandQueue = this.gpu.createCommandQueue();
@@ -93,7 +100,7 @@ export class Main {
     }
 
     // Create pipelineState for render
-    const renderPipelineDescriptor:WebGPURenderPipelineDescriptor = new WebGPURenderPipelineDescriptor();
+    const renderPipelineDescriptor:WebGPURenderPipelineDescriptor = WebMetalTranslator.createWebGPURenderPipelineDescriptor();
     renderPipelineDescriptor.vertexFunction = linesVertexFunction;
     renderPipelineDescriptor.fragmentFunction = fragmentFunction;
     renderPipelineDescriptor.colorAttachments[0].pixelFormat = WebGPUPixelFormat.BGRA8Unorm;
@@ -104,20 +111,20 @@ export class Main {
     this.groundRenderPipelineState = this.gpu.createRenderPipelineState(renderPipelineDescriptor);
 
     // Create pipelineState for render depth
-    const depthStencilDescriptor:WebGPUDepthStencilDescriptor = new WebGPUDepthStencilDescriptor();
+    const depthStencilDescriptor:WebGPUDepthStencilDescriptor = WebMetalTranslator.createWebGPUDepthStencilDescriptor();
     depthStencilDescriptor.depthCompareFunction = WebGPUCompareFunction.less;
     depthStencilDescriptor.depthWriteEnabled = true;
     this.depthStencilState = this.gpu.createDepthStencilState(depthStencilDescriptor);
 
     // Create WebGPURenderPassDescriptor
-    this.renderPassDescriptor = new WebGPURenderPassDescriptor();
+    this.renderPassDescriptor = WebMetalTranslator.createWebGPURenderPassDescriptor();
     const colorAttachment0:WebGPURenderPassColorAttachmentDescriptor = this.renderPassDescriptor.colorAttachments[0];
     colorAttachment0.loadAction = WebGPULoadAction.clear;
     colorAttachment0.storeAction = WebGPUStoreAction.store;
     colorAttachment0.clearColor = [0.1, 0.1, 0.2, 1.0];
 
     // Create depth texture
-    const depthTextureDescriptor:WebGPUTextureDescriptor = new WebGPUTextureDescriptor(
+    const depthTextureDescriptor:WebGPUTextureDescriptor = WebMetalTranslator.createWebGPUTextureDescriptor(
       WebGPUPixelFormat.Depth32Float, Main.CANVAS_WIDTH, Main.CANVAS_HEIGHT, false);
     depthTextureDescriptor.textureType = WebGPUTextureType.type2D;
     depthTextureDescriptor.sampleCount = 1;
