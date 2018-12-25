@@ -1,3 +1,5 @@
+import {WebMetalTranslator} from './webgpu/WebMetalTranslator';
+
 export class Main {
   private static readonly MAX_THREAD_NUM_iOS:number = 512;
   private static readonly MAX_THREAD_NUM_macOS:number = 1024;
@@ -22,7 +24,13 @@ export class Main {
 
   private async init():Promise<void> {
     // Check whether WebGPU is enabled
-    if (!('WebGPURenderingContext' in window)) {
+    if ('WebMetalRenderingContext' in window) {
+      WebMetalTranslator.useWebMetal = true;
+    }
+    else if ('WebGPURenderingContext' in window && 'WebGPULibrary' in window) {
+      WebMetalTranslator.useWebMetal = false;
+    }
+    else {
       document.body.className = 'error';
       return;
     }
@@ -59,7 +67,7 @@ export class Main {
     const canvas:HTMLCanvasElement = <HTMLCanvasElement> document.createElement(('canvas'));
 
     // Create WebGPURenderingContext
-    this.gpu = canvas.getContext('webgpu');
+    this.gpu = WebMetalTranslator.createWebGPURenderingContext(canvas);
 
     // Create WebGPUCommandQueue
     this.commandQueue = this.gpu.createCommandQueue();

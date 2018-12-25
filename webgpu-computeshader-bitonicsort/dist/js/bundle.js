@@ -90,27 +90,61 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Main", function() { return Main; });
-class Main {
+
+// CONCATENATED MODULE: ./src/webgpu/WebMetalTranslator.ts
+class WebMetalTranslator {
+    static get useWebMetal() {
+        return WebMetalTranslator._useWebMetal;
+    }
+    static set useWebMetal(value) {
+        WebMetalTranslator._useWebMetal = value;
+    }
+    static createWebGPURenderingContext(canvas) {
+        return WebMetalTranslator.useWebMetal ? canvas.getContext('webmetal') : canvas.getContext('webgpu');
+    }
+    static createWebGPURenderPipelineDescriptor() {
+        return WebMetalTranslator.useWebMetal ? new WebMetalRenderPipelineDescriptor() : new WebGPURenderPipelineDescriptor();
+    }
+    static createWebGPUDepthStencilDescriptor() {
+        return WebMetalTranslator.useWebMetal ? new WebMetalDepthStencilDescriptor() : new WebGPUDepthStencilDescriptor();
+    }
+    static createWebGPURenderPassDescriptor() {
+        return WebMetalTranslator.useWebMetal ? new WebMetalRenderPassDescriptor() : new WebGPURenderPassDescriptor();
+    }
+    static createWebGPUTextureDescriptor(pixelFormat, width, height, mipmapped) {
+        return WebMetalTranslator.useWebMetal ? new WebMetalTextureDescriptor(pixelFormat, width, height, mipmapped) : new WebGPUTextureDescriptor(pixelFormat, width, height, mipmapped);
+    }
+}
+
+// CONCATENATED MODULE: ./src/Main.ts
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Main", function() { return Main_Main; });
+
+class Main_Main {
     constructor() {
         console.log(new Date());
         this.init();
     }
     async init() {
         // Check whether WebGPU is enabled
-        if (!('WebGPURenderingContext' in window)) {
+        if ('WebMetalRenderingContext' in window) {
+            WebMetalTranslator.useWebMetal = true;
+        }
+        else if ('WebGPURenderingContext' in window && 'WebGPULibrary' in window) {
+            WebMetalTranslator.useWebMetal = false;
+        }
+        else {
             document.body.className = 'error';
             return;
         }
         // Choose appropriate thread size for runnning environment
         let maxThreadgroupNum;
         if (/iP(hone|(o|a)d)/.test(navigator.userAgent)) {
-            this.maxThreadNum = Main.MAX_THREAD_NUM_iOS;
-            maxThreadgroupNum = Main.MAX_THREADGROUP_NUM_iOS;
+            this.maxThreadNum = Main_Main.MAX_THREAD_NUM_iOS;
+            maxThreadgroupNum = Main_Main.MAX_THREADGROUP_NUM_iOS;
         }
         else {
-            this.maxThreadNum = Main.MAX_THREAD_NUM_macOS;
-            maxThreadgroupNum = Main.MAX_THREADGROUP_NUM_macOS;
+            this.maxThreadNum = Main_Main.MAX_THREAD_NUM_macOS;
+            maxThreadgroupNum = Main_Main.MAX_THREADGROUP_NUM_macOS;
         }
         // Selector setup
         this.selectBox = document.getElementById('selectBox');
@@ -131,7 +165,7 @@ class Main {
         // Canvas setup
         const canvas = document.createElement(('canvas'));
         // Create WebGPURenderingContext
-        this.gpu = canvas.getContext('webgpu');
+        this.gpu = WebMetalTranslator.createWebGPURenderingContext(canvas);
         // Create WebGPUCommandQueue
         this.commandQueue = this.gpu.createCommandQueue();
         // Load metal shader file and create each WebGPUFunction to use for computing
@@ -234,12 +268,12 @@ class Main {
         this.logElement.innerText += str + '\n';
     }
 }
-Main.MAX_THREAD_NUM_iOS = 512;
-Main.MAX_THREAD_NUM_macOS = 1024;
-Main.MAX_THREADGROUP_NUM_iOS = 1024;
-Main.MAX_THREADGROUP_NUM_macOS = 2048;
+Main_Main.MAX_THREAD_NUM_iOS = 512;
+Main_Main.MAX_THREAD_NUM_macOS = 1024;
+Main_Main.MAX_THREADGROUP_NUM_iOS = 1024;
+Main_Main.MAX_THREADGROUP_NUM_macOS = 2048;
 window.addEventListener('DOMContentLoaded', () => {
-    new Main();
+    new Main_Main();
 });
 
 
